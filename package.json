@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/server.js",
     "dev": "tsnd --transpile-only --ignore-watch node_modules src/server.ts",
-    "build": "npx tsc",
+    "build": "node_modules/.bin/tsc",
     "typeorm": "tsnd ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
