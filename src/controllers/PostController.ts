@@ -79,7 +79,6 @@ export default {
 
     return res.json({
       post: postView.render(post),
-      url: `http://localhost:3333/uploads/${photo_path}`,
     });
   },
 };
