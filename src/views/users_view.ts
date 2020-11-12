@@ -7,7 +7,7 @@ export default {
       id: user.id,
       name: user.name,
       email: user.email,
-      photo_url: `http://localhost:3333/uploads/${user.photo_path}`,
+      photo_url: `${process.env.API_URL}/uploads/${user.photo_path}`,
     };
   },
   renderMany(users: User[]) {
