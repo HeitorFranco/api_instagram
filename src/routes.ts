@@ -1,4 +1,6 @@
 import { Router } from "express";
+import multer from "multer";
+import uploadConfig from "./config/upload";
 
 import AuthController from "./controllers/AuthController";
 
@@ -7,10 +9,12 @@ import CommentController from "./controllers/CommentController";
 import PostController from "./controllers/PostController";
 import authMiddleware from "./middlewares/AuthMiddleware";
 
+const upload = multer(uploadConfig);
+
 const routes = Router();
 
 routes.post("/auth", AuthController.authenticate);
-routes.post("/users", UserController.create);
+routes.post("/users", upload.single("image"), UserController.create);
 routes.get("/posts", PostController.index);
 
 routes.use(authMiddleware);
@@ -18,6 +22,7 @@ routes.use(authMiddleware);
 
 routes.post("/comments", CommentController.create);
 routes.get("/users", UserController.index);
-routes.post("/posts", PostController.create);
+routes.post("/posts", upload.single("image"), PostController.create);
+routes.get("/posts/:id", PostController.show);
 
 export default routes;
