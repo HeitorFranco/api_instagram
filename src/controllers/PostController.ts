@@ -73,12 +73,12 @@ export default {
       user: user,
     });
 
-    delete post.user.password;
+    //delete post.user.password;
     await postRepository.save(post);
-    delete post.photo_path;
+    //delete post.photo_path;
 
     return res.json({
-      post,
+      post: postView.render(post),
       url: `http://localhost:3333/uploads/${photo_path}`,
     });
   },

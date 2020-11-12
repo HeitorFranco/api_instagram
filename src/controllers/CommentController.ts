@@ -23,7 +23,7 @@ export default {
     });
     await commentRepository.save(comment);
 
-    delete comment.user.password;
+    //delete comment.user.password;
 
     return res.json(comment);
   },

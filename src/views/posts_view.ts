@@ -4,10 +4,10 @@ import userView from "./users_view";
 
 export default {
   render(post: Post) {
-    delete post.user.password;
+    //delete post.user.password;
     if (post.comments) {
       post.comments.forEach((post) => {
-        delete post.user.password;
+        //delete post.user.password;
       });
     }
     return {
@@ -21,7 +21,7 @@ export default {
   },
   renderMany(posts: Post[]) {
     return posts.map((post) => {
-      post.user.password = undefined;
+      //post.user.password = undefined;
       return this.render(post);
     });
   },
