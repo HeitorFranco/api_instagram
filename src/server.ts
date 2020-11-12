@@ -11,4 +11,4 @@ app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 app.use(routes);
 
-app.listen(3333, () => console.log("🏃 Running server"));
+app.listen(process.env.PORT || 3333, () => console.log("🏃 Running server"));
