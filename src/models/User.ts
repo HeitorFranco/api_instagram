@@ -26,6 +26,9 @@ export default class User {
   @Column()
   password: string;
 
+  @Column()
+  photo_path: string;
+
   @BeforeInsert()
   @BeforeUpdate()
   hashPassword() {
