@@ -16,7 +16,7 @@ export default {
       likes: post.likes,
       user: userView.render(post.user),
       comments: post.comments,
-      url: `http://localhost:3333/uploads/${post.photo_path}`,
+      url: `${process.env.API_URL}/uploads/${post.photo_path}`,
     };
   },
   renderMany(posts: Post[]) {
