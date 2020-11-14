@@ -5,11 +5,7 @@ import userView from "./users_view";
 export default {
   render(post: Post) {
     //delete post.user.password;
-    if (post.comments) {
-      post.comments.forEach((post) => {
-        //delete post.user.password;
-      });
-    }
+    console.log(post.id);
     return {
       id: post.id,
       description: post.description,

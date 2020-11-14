@@ -18,6 +18,10 @@ export default {
   },
   async create(req: Request, res: Response) {
     const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      return res.sendStatus(400);
+    }
     const repository = getRepository(User);
 
     const requestImages = req.file;
@@ -27,7 +31,6 @@ export default {
       return res.status(409).send("Usuário já cadastrado no sistema");
 
     const user = repository.create({ name, email, password, photo_path });
-    console.log(user);
     await repository.save(user);
 
     const token = jwt.sign({ id: user.id }, "secret", { expiresIn: "1d" });

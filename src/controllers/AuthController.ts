@@ -10,10 +10,14 @@ export default {
     const repository = getRepository(User);
     const { email, password } = req.body;
 
+    if (!email || !password) {
+      return res.sendStatus(400);
+    }
+
     const user = await repository.findOne({ where: { email } });
     if (!user) return res.status(401).send({ erro: "Usuário não encontrado" });
 
-    const isValidPassword = bcrypt.compare(password, user.password);
+    const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword)
       return res.status(401).send({ erro: "Senha incorreta" });
 

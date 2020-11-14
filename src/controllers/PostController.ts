@@ -25,9 +25,6 @@ export default {
       relations: ["user", "comments"],
       order: { id: "ASC" },
     });
-    {
-      length: posts[1];
-    }
     const total = posts[1];
     const pages = Math.ceil(total / limitN);
 
@@ -43,6 +40,7 @@ export default {
       page: pageN ? pageN : undefined,
     });
   },
+
   async show(req: Request, res: Response) {
     const postRepository = getRepository(Post);
     const { id } = req.params;
@@ -56,7 +54,11 @@ export default {
   },
 
   async create(req: Request, res: Response) {
-    const { description, likes } = req.body;
+    const { description } = req.body;
+
+    if (!description) {
+      return res.sendStatus(400);
+    }
 
     const postRepository = getRepository(Post);
     const userRepository = getRepository(User);
@@ -68,7 +70,6 @@ export default {
 
     const post = postRepository.create({
       description,
-      likes,
       photo_path,
       user: user,
     });
@@ -76,6 +77,8 @@ export default {
     //delete post.user.password;
     await postRepository.save(post);
     //delete post.photo_path;
+
+    req.io.emit("newPost", postView.render(post));
 
     return res.json({
       post: postView.render(post),
