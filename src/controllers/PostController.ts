@@ -71,12 +71,15 @@ export default {
     const post = postRepository.create({
       description,
       photo_path,
+      likes: 0,
       user: user,
     });
 
     //delete post.user.password;
-    await postRepository.save(post);
+    const s = await postRepository.save(post);
     //delete post.photo_path;
+
+    console.log(post.likes, s);
 
     req.io.emit("newPost", postView.render(post));
 

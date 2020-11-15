@@ -15,14 +15,16 @@ const routes = Router();
 
 routes.post("/auth", AuthController.authenticate);
 routes.post("/users", upload.single("image"), UserController.create);
-routes.get("/posts", PostController.index);
 
 routes.use(authMiddleware);
 //Rotas que usam authMiddleware
 
-routes.post("/comments", CommentController.create);
 routes.get("/users", UserController.index);
+
+routes.get("/posts", PostController.index);
 routes.post("/posts", upload.single("image"), PostController.create);
 routes.get("/posts/:id", PostController.show);
+
+routes.post("/comments", CommentController.create);
 
 export default routes;
