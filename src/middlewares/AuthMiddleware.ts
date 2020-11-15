@@ -13,21 +13,20 @@ export default function authMiddleware(
   next: NextFunction
 ) {
   const { authorization } = req.headers;
-  if (!authorization)
+  if (!authorization) {
     return res
-      .sendStatus(401)
+      .status(401)
       .send({ erro: "Token de autenticação não encontrado" });
-
-  const token = authorization.replace("Bearer", "").trim();
+  }
 
   try {
+    const token = authorization.replace("Bearer", "").trim();
     const data = jwt.verify(token, "secret");
 
     const { id } = data as tokenPayload;
-
     req.userId = id;
     return next();
-  } catch {
-    return res.sendStatus(401).send({ erro: "Token inválido" });
+  } catch (err) {
+    return res.status(401).send({ erro: "Token inválido" });
   }
 }
