@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 
 import Post from "./Post";
+import Like from "./Like";
 import Comment from "./Comment";
 import bcrypt from "bcryptjs";
 
@@ -46,4 +47,10 @@ export default class User {
   })
   @JoinColumn({ name: "user_id" })
   comments: Comment[];
+
+  @OneToMany(() => Like, (like) => like.user, {
+    cascade: ["insert", "update"],
+  })
+  @JoinColumn({ name: "user_id" })
+  likes: Like[];
 }

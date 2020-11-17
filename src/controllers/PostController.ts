@@ -4,6 +4,7 @@ import { getRepository } from "typeorm";
 import jwt from "jsonwebtoken";
 
 import User from "../models/User";
+import Like from "../models/Like";
 import Post from "../models/Post";
 import userView from "../views/users_view";
 
@@ -43,13 +44,15 @@ export default {
 
   async show(req: Request, res: Response) {
     const postRepository = getRepository(Post);
+    const likeRepository = getRepository(Like);
     const { id } = req.params;
 
     const post = await postRepository.findOneOrFail({
       where: { id },
       relations: ["comments", "user"],
     });
-
+    const likes = await likeRepository.count({ where: { post_id: id } });
+    console.log(likes);
     return res.json(postView.render(post));
   },
 
@@ -76,10 +79,8 @@ export default {
     });
 
     //delete post.user.password;
-    const s = await postRepository.save(post);
+    await postRepository.save(post);
     //delete post.photo_path;
-
-    console.log(post.likes, s);
 
     req.io.emit("newPost", postView.render(post));
 

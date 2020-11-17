@@ -24,13 +24,18 @@ export default {
     }
     const repository = getRepository(User);
 
-    const requestImages = req.file;
-    const photo_path = requestImages.filename;
+    /*const requestImages = req.file;
+    const photo_path = requestImages.filename;*/
 
     if (await repository.findOne({ where: { email } }))
       return res.status(409).send("Usuário já cadastrado no sistema");
 
-    const user = repository.create({ name, email, password, photo_path });
+    const user = repository.create({
+      name,
+      email,
+      password,
+      photo_path: "user.png",
+    });
     await repository.save(user);
 
     const token = jwt.sign({ id: user.id }, "secret", { expiresIn: "1d" });

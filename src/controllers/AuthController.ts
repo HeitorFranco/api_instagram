@@ -5,6 +5,8 @@ import User from "../models/User";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
+import userView from "../views/users_view";
+
 export default {
   async authenticate(req: Request, res: Response) {
     const repository = getRepository(User);
@@ -25,6 +27,6 @@ export default {
 
     //delete user.password;
 
-    return res.json({ user, token });
+    return res.json({ user: userView.render(user), token });
   },
 };
