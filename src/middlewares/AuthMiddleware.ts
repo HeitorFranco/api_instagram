@@ -16,7 +16,7 @@ export default function authMiddleware(
   if (!authorization) {
     return res
       .status(401)
-      .send({ erro: "Token de autenticação não encontrado" });
+      .json({ erro: "Token de autenticação não encontrado" });
   }
 
   try {
@@ -27,6 +27,6 @@ export default function authMiddleware(
     req.userId = id;
     return next();
   } catch (err) {
-    return res.status(401).send({ erro: "Token inválido" });
+    return res.status(401).json({ erro: "Token inválido" });
   }
 }
