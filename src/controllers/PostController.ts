@@ -51,8 +51,6 @@ export default {
       where: { id },
       relations: ["comments", "user"],
     });
-    const likes = await likeRepository.count({ where: { post_id: id } });
-    console.log(likes);
     return res.json(postView.render(post));
   },
 

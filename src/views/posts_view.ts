@@ -10,7 +10,7 @@ export default {
       description: post.description,
       likes: post.likes,
       user: post.user ? userView.render(post.user) : undefined,
-      comments: post.comments,
+      comments: post.comments || [],
       url: `${process.env.API_URL}/uploads/${post.photo_path}`,
     };
   },
