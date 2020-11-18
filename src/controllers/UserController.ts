@@ -9,10 +9,11 @@ import userView from "../views/users_view";
 export default {
   async index(req: Request, res: Response) {
     const repository = getRepository(User);
-    const user = await repository.findOneOrFail({
+    const user = await repository.findOne({
       where: { id: req.userId },
       relations: ["posts"],
     });
+    if (!user) return res.status(401).json({ erro: "Usuário não encontrado" });
 
     return res.json(userView.render(user));
   },
