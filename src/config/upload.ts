@@ -11,4 +11,15 @@ export default {
       cb(null, filename);
     },
   }),
+  fileFilter: (req: any, file: any, cb: any) => {
+    const isAccepted = ["image/png", "image/jpg", "image/jpeg"].find(
+      (formatoAceito) => formatoAceito == file.mimetype
+    );
+
+    if (isAccepted) {
+      return cb(null, true);
+    }
+
+    return cb(null, false);
+  },
 };
