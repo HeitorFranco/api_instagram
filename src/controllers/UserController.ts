@@ -18,9 +18,9 @@ export default {
     return res.json(userView.render(user));
   },
   async create(req: Request, res: Response) {
-    const { name, email, password } = req.body;
+    const { username, name, email, password } = req.body;
 
-    if (!name || !email || !password) {
+    if (!username || !name || !email || !password) {
       return res.sendStatus(400);
     }
     const repository = getRepository(User);
@@ -32,6 +32,7 @@ export default {
       return res.status(409).json({ erro: "Usuário já cadastrado no sistema" });
 
     const user = repository.create({
+      username,
       name,
       email,
       password,
