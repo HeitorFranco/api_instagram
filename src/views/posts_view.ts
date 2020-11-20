@@ -1,9 +1,9 @@
-import Post from "../models/Post";
+import IPost from "../interfaces/Post";
 
 import userView from "./users_view";
 
 export default {
-  render(post: Post) {
+  render(post: IPost) {
     //delete post.user.password;
     return {
       id: post.id,
@@ -12,9 +12,10 @@ export default {
       user: post.user ? userView.render(post.user) : undefined,
       comments: post.comments || [],
       url: `${process.env.API_URL}/uploads/${post.photo_path}`,
+      myLike: post.myLike || undefined,
     };
   },
-  renderMany(posts: Post[]) {
+  renderMany(posts: IPost[]) {
     return posts.map((post) => {
       //post.user.password = undefined;
       return this.render(post);

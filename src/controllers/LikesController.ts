@@ -43,19 +43,21 @@ export default {
 
       req.io.emit("newLike", postView.render(newPost));
 
-      return res.json(likeView.render(likes));
+      return res.json({ ...likeView.render(likes), ["myLike"]: true });
     }
+
     async function deslike() {
       await likeRepository.remove(myLike!);
-
-      await postRepository.update({ id: postId }, { likes: post.likes - 1 });
+      await postRepository.update(post, { likes: post.likes - 1 });
       const newPost = await postRepository.findOneOrFail({
         where: { id: postId },
         relations: ["comments", "user"],
       });
-      req.io.emit("deleteLike", postView.render(newPost));
+
       let likes = likeRepository.create({ post: newPost, user });
-      return res.json(likeView.render(likes));
+
+      req.io.emit("deleteLike", postView.render(newPost));
+      return res.json({ ...likeView.render(likes), ["myLike"]: false });
     }
   },
 };

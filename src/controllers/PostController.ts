@@ -6,13 +6,17 @@ import jwt from "jsonwebtoken";
 import User from "../models/User";
 import Like from "../models/Like";
 import Post from "../models/Post";
-import userView from "../views/users_view";
 
+import userView from "../views/users_view";
 import postView from "../views/posts_view";
+import likeView from "../views/likes_view";
+
+import IPost from "../interfaces/Post";
 
 export default {
   async index(req: Request, res: Response) {
     const postRepository = getRepository(Post);
+    const likeRepository = getRepository(Like);
     const { page = 1, limit = 0 } = req.query;
 
     const pageN = Number(page);
@@ -33,8 +37,31 @@ export default {
       return userView.render(post.user);
     });
 
+    let data: any = [];
+
+    const likes = likeView.renderMany(
+      await likeRepository.find({ relations: ["post"] })
+    );
+    if (likes) {
+      posts[0].forEach((post) => {
+        let count = 0;
+        likes.forEach((like, index) => {
+          if (count === 0) {
+            if (like.post.id === post.id) {
+              data.push(postView.render({ ...post, ["myLike"]: true }));
+            } else {
+              data.push(postView.render({ ...post, ["myLike"]: false }));
+            }
+            count++;
+          }
+        });
+      });
+    }
+
+    data = postView.renderMany(posts[0]);
+
     return res.json({
-      posts: postView.renderMany(posts[0]),
+      posts: data,
       total,
       pages: pages ? pages : undefined,
       limit: limit ? limitN : undefined,
