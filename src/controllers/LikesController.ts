@@ -41,7 +41,10 @@ export default {
 
       await likeRepository.save(likes);
 
-      req.io.emit("newLike", postView.render(newPost));
+      req.io.emit("newLike", {
+        ...postView.render(newPost),
+        myLikeId: req.userId,
+      });
 
       return res.json({ ...likeView.render(likes), ["myLike"]: true });
     }
