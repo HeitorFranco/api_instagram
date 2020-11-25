@@ -23,6 +23,10 @@ export class createPosts1603966061720 implements MigrationInterface {
             type: "varchar",
           },
           {
+            name: "photo_path_compressed",
+            type: "varchar",
+          },
+          {
             name: "description",
             type: "varchar",
           },

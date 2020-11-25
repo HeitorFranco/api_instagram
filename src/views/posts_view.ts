@@ -12,6 +12,7 @@ export default {
       user: post.user ? userView.render(post.user) : undefined,
       comments: post.comments || [],
       url: `${process.env.API_URL}/uploads/${post.photo_path}`,
+      url_compressed: `${process.env.API_URL}/uploads/${post.photo_path_compressed}`,
       myLike: post.myLike || undefined,
     };
   },

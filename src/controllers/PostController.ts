@@ -12,6 +12,7 @@ import postView from "../views/posts_view";
 import likeView from "../views/likes_view";
 
 import IPost from "../interfaces/Post";
+import compressImage from "../utils/compressImage";
 
 export default {
   async index(req: Request, res: Response) {
@@ -94,11 +95,17 @@ export default {
     const user = await userRepository.findOne({ where: { id: req.userId } });
 
     const requestImages = req.file;
-    const photo_path = requestImages.filename;
+
+    const [photo_path, photo_path_compressed] = compressImage(
+      requestImages,
+      700,
+      200
+    );
 
     const post = postRepository.create({
       description,
       photo_path,
+      photo_path_compressed,
       likes: 0,
       user: user,
     });

@@ -19,6 +19,9 @@ export default class Post {
   photo_path: string;
 
   @Column()
+  photo_path_compressed: string;
+
+  @Column()
   description: string;
 
   @Column()
