@@ -28,7 +28,10 @@ export default {
     /*const requestImages = req.file;
     const photo_path = requestImages.filename;*/
 
-    if (await repository.findOne({ where: { email } }))
+    if (
+      (await repository.findOne({ where: { email } })) ||
+      (await repository.findOne({ where: { username } }))
+    )
       return res.status(409).json({ erro: "Usuário já cadastrado no sistema" });
 
     const user = repository.create({
