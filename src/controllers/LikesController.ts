@@ -59,7 +59,10 @@ export default {
 
       let likes = likeRepository.create({ post: newPost, user });
 
-      req.io.emit("deleteLike", postView.render(newPost));
+      req.io.emit("deleteLike", {
+        ...postView.render(newPost),
+        myLikeId: req.userId,
+      });
       return res.json({ ...likeView.render(likes), ["myLike"]: false });
     }
   },
