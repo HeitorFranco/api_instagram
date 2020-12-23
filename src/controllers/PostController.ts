@@ -41,25 +41,20 @@ export default {
     let data: any = [];
 
     const likes = likeView.renderMany(
-      await likeRepository.find({ relations: ["post"] })
+      await likeRepository.find({ relations: ["post", "user"] })
     );
-    if (likes) {
+    if (likes.length) {
       posts[0].forEach((post) => {
-        let count = 0;
+        data.push(postView.render({ ...post, myLike: false }));
         likes.forEach((like, index) => {
-          if (count === 0) {
-            if (like.post.id === post.id) {
-              data.push(postView.render({ ...post, ["myLike"]: true }));
-            } else {
-              data.push(postView.render({ ...post, ["myLike"]: false }));
-            }
-            count++;
+          if (like.post.id === post.id && like.user.id === +req.userId) {
+            data[data.length - 1] = postView.render({ ...post, myLike: true });
           }
         });
       });
+    } else {
+      data = postView.renderMany(posts[0]);
     }
-
-    data = postView.renderMany(posts[0]);
 
     return res.json({
       posts: data,
@@ -96,10 +91,10 @@ export default {
 
     const requestImages = req.file;
 
-    const [photo_path, photo_path_compressed] = compressImage(
+    const [photo_path, photo_path_compressed] = await compressImage(
       requestImages,
       700,
-      200
+      100
     );
 
     const post = postRepository.create({
@@ -113,7 +108,6 @@ export default {
     //delete post.user.password;
     await postRepository.save(post);
     //delete post.photo_path;
-
     req.io.emit("newPost", postView.render(post));
 
     return res.json({
