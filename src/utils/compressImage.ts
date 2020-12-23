@@ -1,7 +1,7 @@
 import fs from "fs";
 import sharp from "sharp";
 
-export default (
+export default async (
   file: Express.Multer.File,
   size: number,
   compressed_size: number
@@ -11,36 +11,33 @@ export default (
     file.path.split(".")[0] + "_compressed" + ".webp",
   ];
 
-  const paths = [];
+  const paths: any = [];
 
   for (let i = 0; i < newPath.length; i++) {
-    sharp(file.path)
+    const data = await sharp(file.path)
       .resize(i == 0 ? size : compressed_size)
-
       .toFormat("webp")
-
       .webp({
         quality: 80,
       })
+      .toBuffer();
 
-      .toBuffer()
+    fs.writeFile(newPath[i], data, (err) => {
+      if (err) {
+        throw err;
+      }
+    });
 
-      .then((data: any) => {
-        fs.access(file.path, (err) => {
-          if (!err) {
-            fs.unlink(file.path, (err) => {
-              if (err) console.log(err);
-            });
-          }
-        });
-
-        fs.writeFile(newPath[i], data, (err) => {
-          if (err) {
-            throw err;
-          }
-        });
-      });
     paths.push(newPath[i].split("/uploads/")[1]);
   }
+
+  fs.access(file.path, (err) => {
+    if (!err) {
+      fs.unlink(file.path, (err) => {
+        if (err) console.log(err);
+      });
+    }
+  });
+
   return paths;
 };
