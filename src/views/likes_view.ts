@@ -8,6 +8,7 @@ export default {
     return {
       id: like.id,
       post: postView.render(like.post),
+      user: userView.render(like.user),
     };
   },
   renderMany(likes: Like[]) {
