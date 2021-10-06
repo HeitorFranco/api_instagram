@@ -29,7 +29,7 @@ export default {
       take: limitN,
       skip: offset,
       relations: ["user", "comments"],
-      order: { id: "ASC" },
+      order: { id: "DESC" },
     });
     const total = posts[1];
     const pages = Math.ceil(total / limitN);
@@ -90,6 +90,10 @@ export default {
     const user = await userRepository.findOne({ where: { id: req.userId } });
 
     const requestImages = req.file;
+
+    if (!requestImages) {
+      return res.sendStatus(400);
+    }
 
     const [photo_path, photo_path_compressed] = await compressImage(
       requestImages,
